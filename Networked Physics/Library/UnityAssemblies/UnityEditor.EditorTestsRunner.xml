@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEditor.EditorTestsRunner</name>
+    </assembly>
+    <member name="T:UnityEditor.EditorTests.Batch">
+      <summary>
+        <para>This class can invoke editor tests runs.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEditor.EditorTests.Batch.RunTests(UnityEditor.EditorTests.ITestRunnerCallback)">
+      <summary>
+        <para>Execute editor tests run.</para>
+      </summary>
+      <param name="testRunnerCallback">Test runner callback.</param>
+      <param name="nameFilter">Test names to run.</param>
+      <param name="categoryFilter">Categories to run.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTests.Batch.RunTests(UnityEditor.EditorTests.ITestRunnerCallback,System.String[],System.String[])">
+      <summary>
+        <para>Execute editor tests run.</para>
+      </summary>
+      <param name="testRunnerCallback">Test runner callback.</param>
+      <param name="nameFilter">Test names to run.</param>
+      <param name="categoryFilter">Categories to run.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTests.Batch.RunTestsInRunnerWindow">
+      <summary>
+        <para>Run tests in the editor tests runner window.</para>
+      </summary>
+      <param name="tests">Names of the tests to run.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTests.Batch.RunTestsInRunnerWindow(System.String[])">
+      <summary>
+        <para>Run tests in the editor tests runner window.</para>
+      </summary>
+      <param name="tests">Names of the tests to run.</param>
+    </member>
+    <member name="?:UnityEditor.EditorTests.ITestResult">
+      <summary>
+        <para>Interface for editor tests runner callback.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.duration">
+      <summary>
+        <para>Duration of the test in seconds.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.executed">
+      <summary>
+        <para>Whether the test was executed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.fullName">
+      <summary>
+        <para>Full name of the test (includes namespace).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.id">
+      <summary>
+        <para>Id of the test.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.isIgnored">
+      <summary>
+        <para>Whether the test should be ignored (and not executed).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.isSuccess">
+      <summary>
+        <para>Whether the test completed successfully.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.logs">
+      <summary>
+        <para>Logs from the test run.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.message">
+      <summary>
+        <para>Message from the test.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.name">
+      <summary>
+        <para>Name of the test (without namespace).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.resultState">
+      <summary>
+        <para>The result.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.EditorTests.ITestResult.stackTrace">
+      <summary>
+        <para>Stacktrace from the test run.</para>
+      </summary>
+    </member>
+    <member name="?:UnityEditor.EditorTests.ITestRunnerCallback">
+      <summary>
+        <para>Callback for the editor tests runner.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEditor.EditorTests.ITestRunnerCallback.RunFinished">
+      <summary>
+        <para>The run was finished.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEditor.EditorTests.ITestRunnerCallback.RunFinishedException(System.Exception)">
+      <summary>
+        <para>The run was interrupted by an exception.</para>
+      </summary>
+      <param name="exception">The exception that was raised.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTests.ITestRunnerCallback.RunStarted(System.String,System.Int32)">
+      <summary>
+        <para>The run has started.</para>
+      </summary>
+      <param name="suiteName">The name of the suite that is being run.</param>
+      <param name="testCount">The number of tests that will be run.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTests.ITestRunnerCallback.TestFinished(UnityEditor.EditorTests.ITestResult)">
+      <summary>
+        <para>A test has been finished.</para>
+      </summary>
+      <param name="testResult">The result of the test.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTests.ITestRunnerCallback.TestStarted(System.String)">
+      <summary>
+        <para>A test has been started.</para>
+      </summary>
+      <param name="testName">The name of the test.</param>
+    </member>
+    <member name="T:UnityEditor.EditorTests.TestResultState">
+      <summary>
+        <para>Result of an editor test run.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Cancelled">
+      <summary>
+        <para>The test was cancelled.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Error">
+      <summary>
+        <para>The test finished with an error.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Failure">
+      <summary>
+        <para>The test finished with a failure.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Ignored">
+      <summary>
+        <para>The test was ignored.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Inconclusive">
+      <summary>
+        <para>The test result is inconclusive.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.NotRunnable">
+      <summary>
+        <para>The test is not runnable.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Skipped">
+      <summary>
+        <para>The test was skipped.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.EditorTests.TestResultState.Success">
+      <summary>
+        <para>The test succeeded.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEditor.EditorTestsRunner.EditorTestsWithLogParser">
+      <summary>
+        <para>Base class for editor tests which have the ability to assert log messages.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEditor.EditorTestsRunner.EditorTestsWithLogParser.ExpectLogLine(System.String)">
+      <summary>
+        <para>Expect a log message that matches the parameter.</para>
+      </summary>
+      <param name="message">The expected log message.</param>
+    </member>
+    <member name="M:UnityEditor.EditorTestsRunner.EditorTestsWithLogParser.ExpectLogLineRegex(System.String)">
+      <summary>
+        <para>Expect a log message that matches the regular expression pattern.</para>
+      </summary>
+      <param name="pattern">The expected regex pattern.</param>
+    </member>
+  </members>
+</doc>
