@@ -83,7 +83,7 @@ public class RemoteAvatar : OvrAvatarDriver
             {
                 if ( ( finish - start ).magnitude >= 1 )
                 {
-                    lineRenderer.numPositions = 2;
+                    lineRenderer.positionCount = 2;
                     lineRenderer.SetPosition( 0, start );
                     lineRenderer.SetPosition( 1, finish );
                     lineRenderer.startWidth = LineWidth;
@@ -91,7 +91,7 @@ public class RemoteAvatar : OvrAvatarDriver
                 }
                 else
                 {
-                    lineRenderer.numPositions = 0;
+                    lineRenderer.positionCount = 0;
                 }
             }
         }

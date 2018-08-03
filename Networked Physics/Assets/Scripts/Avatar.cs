@@ -760,7 +760,7 @@ public class Avatar: OvrAvatarLocalDriver
 
         if ( lineRenderer )
         {
-            lineRenderer.numPositions = 2;
+            lineRenderer.positionCount = 2;
             lineRenderer.SetPosition( 0, start );
             lineRenderer.SetPosition( 1, finish );
             lineRenderer.startWidth = LineWidth;

@@ -1,4 +1,6 @@
-﻿/********************************************************************************//**
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+/********************************************************************************//**
 \file      UtilCg.cginc
 \brief     Utility functions for OvrTouch.
 		   
@@ -19,7 +21,7 @@
 
 //==============================================================================
 float4 UtilProjectedPosition (float4 vertex) {
-	float4 projectedPosition = ComputeScreenPos(mul(UNITY_MATRIX_MVP, vertex));
+	float4 projectedPosition = ComputeScreenPos(UnityObjectToClipPos(vertex));
 	projectedPosition.z = -mul(UNITY_MATRIX_MV, vertex).z;
 	return projectedPosition;
 }

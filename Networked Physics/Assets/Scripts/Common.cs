@@ -121,11 +121,6 @@ public class Common: MonoBehaviour
 
     protected ServerInfo serverInfo = new ServerInfo();
 
-    protected void Awake()
-    {
-        OVRPlugin.ignoreVrFocus = true;
-    }
-
     protected void Start()
     {
         Debug.Log( "Running Tests" );
