@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum KeyValuePairType : uint
+  public enum KeyValuePairType : int
   {
     [Description("STRING")]
     String,

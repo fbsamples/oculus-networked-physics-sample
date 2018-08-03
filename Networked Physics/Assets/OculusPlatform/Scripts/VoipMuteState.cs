@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum VoipMuteState : uint
+  public enum VoipMuteState : int
   {
     [Description("UNKNOWN")]
     Unknown,

@@ -10,28 +10,31 @@ namespace Oculus.Platform
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void UnityLogDelegate(IntPtr tag, IntPtr msg);
 
-    void CPPLogCallback(IntPtr tag, IntPtr message)
+    public Request<Models.PlatformInitialize> InitializeInEditor()
     {
-      Debug.Log(string.Format("{0}: {1}", Marshal.PtrToStringAnsi(tag), Marshal.PtrToStringAnsi(message)));
-    }
-
-    public bool InitializeInEditor()
-    {
-      if (String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformAccessToken))
+#if UNITY_ANDROID
+      if (String.IsNullOrEmpty(PlatformSettings.MobileAppID))
       {
-        throw new UnityException("Update your access token by selecting 'Oculus Platform' -> 'Edit Settings'");
+        throw new UnityException("Update your App ID by selecting 'Oculus Platform' -> 'Edit Settings'");
       }
-      return Initialize(StandalonePlatformSettings.OculusPlatformAccessToken);
-    }
-
-    public bool Initialize(string accessToken)
-    {
-      //UnityLogDelegate callback_delegate = new UnityLogDelegate(CPPLogCallback);
-      //IntPtr intptr_delegate = Marshal.GetFunctionPointerForDelegate(callback_delegate);
+      var appID = PlatformSettings.MobileAppID;
+#else
+      if (String.IsNullOrEmpty(PlatformSettings.AppID))
+      {
+        throw new UnityException("Update your App ID by selecting 'Oculus Platform' -> 'Edit Settings'");
+      }
+      var appID = PlatformSettings.AppID;
+#endif
+      if (String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformTestUserAccessToken))
+      {
+        throw new UnityException("Update your standalone credentials by selecting 'Oculus Platform' -> 'Edit Settings'");
+      }
+      var accessToken = StandalonePlatformSettings.OculusPlatformTestUserAccessToken;
 
       CAPI.ovr_UnityResetTestPlatform();
-      CAPI.ovr_UnityInitWrapperStandalone(accessToken, IntPtr.Zero);
-      return true;
+      CAPI.ovr_UnityInitGlobals(IntPtr.Zero);
+
+      return new Request<Models.PlatformInitialize>(CAPI.ovr_PlatformInitializeWithAccessToken(UInt64.Parse(appID), accessToken));
     }
   }
 }

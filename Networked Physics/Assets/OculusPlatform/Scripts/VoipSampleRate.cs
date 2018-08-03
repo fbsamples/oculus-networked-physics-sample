@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum VoipSampleRate : uint
+  public enum VoipSampleRate : int
   {
     [Description("UNKNOWN")]
     Unknown,

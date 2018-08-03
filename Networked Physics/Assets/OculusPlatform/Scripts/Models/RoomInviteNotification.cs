@@ -12,6 +12,7 @@ namespace Oculus.Platform.Models
   {
     public readonly UInt64 ID;
     public readonly UInt64 RoomID;
+    public readonly UInt64 SenderID;
     public readonly DateTime SentTime;
 
 
@@ -19,6 +20,7 @@ namespace Oculus.Platform.Models
     {
       ID = CAPI.ovr_RoomInviteNotification_GetID(o);
       RoomID = CAPI.ovr_RoomInviteNotification_GetRoomID(o);
+      SenderID = CAPI.ovr_RoomInviteNotification_GetSenderID(o);
       SentTime = CAPI.ovr_RoomInviteNotification_GetSentTime(o);
     }
   }

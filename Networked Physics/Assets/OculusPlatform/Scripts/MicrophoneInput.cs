@@ -31,12 +31,6 @@ namespace Oculus.Platform
     public float[] Update()
     {
       int pos = Microphone.GetPosition(null);
-
-      if (pos == 0 && lastMicrophoneSample == 0)
-      {
-        Debug.LogWarning("Possible microphone error");
-      }
-
       int copySize = 0;
       if (pos < lastMicrophoneSample)
       {

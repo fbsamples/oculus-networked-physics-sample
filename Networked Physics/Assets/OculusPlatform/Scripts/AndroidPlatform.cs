@@ -18,5 +18,18 @@ namespace Oculus.Platform
       return false;
 #endif
     }
+
+    public Request<Models.PlatformInitialize> AsyncInitialize(string appId)
+    {
+#if UNITY_ANDROID
+      if(String.IsNullOrEmpty(appId))
+      {
+        throw new UnityException("AppID must not be null or empty");
+      }
+      return new Request<Models.PlatformInitialize>(CAPI.ovr_UnityInitWrapperAsynchronous(appId));
+#else
+      return new Request<Models.PlatformInitialize>(0);
+#endif
+    }
   }
 }

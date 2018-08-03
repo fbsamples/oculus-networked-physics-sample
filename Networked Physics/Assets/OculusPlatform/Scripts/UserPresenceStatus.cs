@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum UserPresenceStatus : uint
+  public enum UserPresenceStatus : int
   {
     [Description("UNKNOWN")]
     Unknown,

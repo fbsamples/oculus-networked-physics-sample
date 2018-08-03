@@ -14,6 +14,14 @@ namespace Oculus.Platform
       Handle = CAPI.ovr_MatchmakingOptions_Create();
     }
 
+    public void SetCreateRoomDataStore(string key, string value) {
+      CAPI.ovr_MatchmakingOptions_SetCreateRoomDataStoreString(Handle, key, value);
+    }
+
+    public void ClearCreateRoomDataStore() {
+      CAPI.ovr_MatchmakingOptions_ClearCreateRoomDataStore(Handle);
+    }
+
     public void SetCreateRoomJoinPolicy(RoomJoinPolicy value) {
       CAPI.ovr_MatchmakingOptions_SetCreateRoomJoinPolicy(Handle, value);
     }

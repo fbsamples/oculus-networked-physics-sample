@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum PeerConnectionState : uint
+  public enum PeerConnectionState : int
   {
     [Description("UNKNOWN")]
     Unknown,
@@ -21,7 +21,7 @@ namespace Oculus.Platform
 
     /// Connection to the peer is closed. A connection transitions into this state
     /// when it is explicitly closed by either the local or remote peer calling
-    /// ovr_Net_Close(). It also enters this state if the remote peer no longer
+    /// Net.Close(). It also enters this state if the remote peer no longer
     /// responds to our keep-alive probes.
     [Description("CLOSED")]
     Closed,

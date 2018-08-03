@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum LeaderboardFilterType : uint
+  public enum LeaderboardFilterType : int
   {
     [Description("NONE")]
     None,

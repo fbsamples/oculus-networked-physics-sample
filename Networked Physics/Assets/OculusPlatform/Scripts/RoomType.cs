@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum RoomType : uint
+  public enum RoomType : int
   {
     [Description("UNKNOWN")]
     Unknown,
