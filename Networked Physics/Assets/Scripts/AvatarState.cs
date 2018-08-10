@@ -33,8 +33,8 @@ public struct AvatarStateQuantized
     public uint left_hand_rotation_b;
     public uint left_hand_rotation_c;
 
-    public int left_hand_grip_flex;
-    public int left_hand_index_flex;
+    public int left_hand_grip_trigger;
+    public int left_hand_index_trigger;
     public bool left_hand_pointing;
     public bool left_hand_thumbs_up;
 
@@ -59,8 +59,8 @@ public struct AvatarStateQuantized
     public uint right_hand_rotation_b;
     public uint right_hand_rotation_c;
 
-    public int right_hand_grip_flex;
-    public int right_hand_index_flex;
+    public int right_hand_grip_trigger;
+    public int right_hand_index_trigger;
     public bool right_hand_pointing;
     public bool right_hand_thumbs_up;
 
@@ -90,8 +90,8 @@ public struct AvatarState
     
     public Vector3 left_hand_position;
     public Quaternion left_hand_rotation;
-    public float left_hand_grip_flex;
-    public float left_hand_index_flex;
+    public float left_hand_grip_trigger;
+    public float left_hand_index_trigger;
     public bool left_hand_pointing;
     public bool left_hand_thumbs_up;
     public bool left_hand_holding_cube;
@@ -103,8 +103,8 @@ public struct AvatarState
 
     public Vector3 right_hand_position;
     public Quaternion right_hand_rotation;
-    public float right_hand_grip_flex;
-    public float right_hand_index_flex;
+    public float right_hand_grip_trigger;
+    public float right_hand_index_trigger;
     public bool right_hand_pointing;
     public bool right_hand_thumbs_up;
     public bool right_hand_holding_cube;
@@ -127,8 +127,8 @@ public struct AvatarState
 
         state.left_hand_position = frame.handLeftPosition;
         state.left_hand_rotation = frame.handLeftRotation;
-        state.left_hand_grip_flex = frame.handLeftPose.gripFlex;
-        state.left_hand_index_flex = frame.handLeftPose.indexFlex;
+        state.left_hand_grip_trigger = frame.handLeftPose.gripFlex;
+        state.left_hand_index_trigger = frame.handLeftPose.indexFlex;
         state.left_hand_pointing = frame.handLeftPose.isPointing;
         state.left_hand_thumbs_up = frame.handLeftPose.isThumbUp;
 
@@ -156,8 +156,8 @@ public struct AvatarState
 
         state.right_hand_position = frame.handRightPosition;
         state.right_hand_rotation = frame.handRightRotation;
-        state.right_hand_grip_flex = frame.handRightPose.gripFlex;
-        state.right_hand_index_flex = frame.handRightPose.indexFlex;
+        state.right_hand_grip_trigger = frame.handRightPose.gripFlex;
+        state.right_hand_index_trigger = frame.handRightPose.indexFlex;
         state.right_hand_pointing = frame.handRightPose.isPointing;
         state.right_hand_thumbs_up = frame.handRightPose.isThumbUp;
 
@@ -193,15 +193,15 @@ public struct AvatarState
 
         frame.handLeftPosition = state.left_hand_position;
         frame.handLeftRotation = state.left_hand_rotation;
-        frame.handLeftPose.gripFlex = state.left_hand_grip_flex;
-        frame.handLeftPose.indexFlex = state.left_hand_index_flex;
+        frame.handLeftPose.gripFlex = state.left_hand_grip_trigger;
+        frame.handLeftPose.indexFlex = state.left_hand_index_trigger;
         frame.handLeftPose.isPointing = state.left_hand_pointing;
         frame.handLeftPose.isThumbUp = state.left_hand_thumbs_up;
 
         frame.handRightPosition = state.right_hand_position;
         frame.handRightRotation = state.right_hand_rotation;
-        frame.handRightPose.gripFlex = state.right_hand_grip_flex;
-        frame.handRightPose.indexFlex = state.right_hand_index_flex;
+        frame.handRightPose.gripFlex = state.right_hand_grip_trigger;
+        frame.handRightPose.indexFlex = state.right_hand_index_trigger;
         frame.handRightPose.isPointing = state.right_hand_pointing;
         frame.handRightPose.isThumbUp = state.right_hand_thumbs_up;
 
@@ -311,8 +311,8 @@ public struct AvatarState
                                             out quantized.left_hand_rotation_b,
                                             out quantized.left_hand_rotation_c );
 
-        quantized.left_hand_grip_flex = (int) Math.Floor( state.left_hand_grip_flex * Constants.FlexMaximum + 0.5f );
-        quantized.left_hand_index_flex = (int) Math.Floor( state.left_hand_index_flex * Constants.FlexMaximum + 0.5f );
+        quantized.left_hand_grip_trigger = (int) Math.Floor( state.left_hand_grip_trigger * Constants.TriggerMaximum + 0.5f );
+        quantized.left_hand_index_trigger = (int) Math.Floor( state.left_hand_index_trigger * Constants.TriggerMaximum + 0.5f );
         quantized.left_hand_pointing = state.left_hand_pointing;
         quantized.left_hand_thumbs_up = state.left_hand_thumbs_up;
 
@@ -359,8 +359,8 @@ public struct AvatarState
                                             out quantized.right_hand_rotation_b,
                                             out quantized.right_hand_rotation_c );
 
-        quantized.right_hand_grip_flex = (int) Math.Floor( state.right_hand_grip_flex * Constants.FlexMaximum + 0.5f );
-        quantized.right_hand_index_flex = (int) Math.Floor( state.right_hand_index_flex * Constants.FlexMaximum + 0.5f );
+        quantized.right_hand_grip_trigger = (int) Math.Floor( state.right_hand_grip_trigger * Constants.TriggerMaximum + 0.5f );
+        quantized.right_hand_index_trigger = (int) Math.Floor( state.right_hand_index_trigger * Constants.TriggerMaximum + 0.5f );
         quantized.right_hand_pointing = state.right_hand_pointing;
         quantized.right_hand_thumbs_up = state.right_hand_thumbs_up;
 
@@ -436,8 +436,8 @@ public struct AvatarState
                                                                        quantized.left_hand_rotation_b,
                                                                        quantized.left_hand_rotation_c );
 
-        state.left_hand_grip_flex = quantized.left_hand_grip_flex * 1.0f / Constants.FlexMaximum;
-        state.left_hand_index_flex = quantized.left_hand_index_flex * 1.0f / Constants.FlexMaximum;
+        state.left_hand_grip_trigger = quantized.left_hand_grip_trigger * 1.0f / Constants.TriggerMaximum;
+        state.left_hand_index_trigger = quantized.left_hand_index_trigger * 1.0f / Constants.TriggerMaximum;
         state.left_hand_pointing = quantized.left_hand_pointing;
         state.left_hand_thumbs_up = quantized.left_hand_thumbs_up;
 
@@ -456,8 +456,8 @@ public struct AvatarState
                                                                         quantized.right_hand_rotation_b,
                                                                         quantized.right_hand_rotation_c );
 
-        state.right_hand_grip_flex = quantized.right_hand_grip_flex * 1.0f / Constants.FlexMaximum;
-        state.right_hand_index_flex = quantized.right_hand_index_flex * 1.0f / Constants.FlexMaximum;
+        state.right_hand_grip_trigger = quantized.right_hand_grip_trigger * 1.0f / Constants.TriggerMaximum;
+        state.right_hand_index_trigger = quantized.right_hand_index_trigger * 1.0f / Constants.TriggerMaximum;
         state.right_hand_pointing = quantized.right_hand_pointing;
         state.right_hand_thumbs_up = quantized.right_hand_thumbs_up;
 
@@ -483,8 +483,8 @@ public struct AvatarState
 
         output.left_hand_position = a.left_hand_position * ( 1 - t ) + b.left_hand_position * t;
         output.left_hand_rotation = Quaternion.Slerp( a.left_hand_rotation, b.left_hand_rotation, t );
-        output.left_hand_grip_flex = a.left_hand_grip_flex * ( 1 - t ) + b.left_hand_grip_flex * t;
-        output.left_hand_index_flex = a.left_hand_index_flex * ( 1 - t ) + b.left_hand_index_flex * t;
+        output.left_hand_grip_trigger = a.left_hand_grip_trigger * ( 1 - t ) + b.left_hand_grip_trigger * t;
+        output.left_hand_index_trigger = a.left_hand_index_trigger * ( 1 - t ) + b.left_hand_index_trigger * t;
         output.left_hand_pointing = a.left_hand_pointing;
         output.left_hand_thumbs_up = a.left_hand_thumbs_up;
         output.left_hand_holding_cube = a.left_hand_holding_cube;
@@ -505,8 +505,8 @@ public struct AvatarState
 
         output.right_hand_position = a.right_hand_position * ( 1 - t ) + b.right_hand_position * t;
         output.right_hand_rotation = Quaternion.Slerp( a.right_hand_rotation, b.right_hand_rotation, t );
-        output.right_hand_grip_flex = a.right_hand_grip_flex * ( 1 - t ) + b.right_hand_grip_flex * t;
-        output.right_hand_index_flex = a.right_hand_index_flex * ( 1 - t ) + b.right_hand_index_flex * t;
+        output.right_hand_grip_trigger = a.right_hand_grip_trigger * ( 1 - t ) + b.right_hand_grip_trigger * t;
+        output.right_hand_index_trigger = a.right_hand_index_trigger * ( 1 - t ) + b.right_hand_index_trigger * t;
         output.right_hand_pointing = a.right_hand_pointing;
         output.right_hand_thumbs_up = a.right_hand_thumbs_up;
         output.right_hand_holding_cube = a.right_hand_holding_cube;

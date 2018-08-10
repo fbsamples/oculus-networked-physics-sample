@@ -54,9 +54,9 @@ public class Avatar: OvrAvatarLocalDriver
 
     public struct HandInput
     {
-        public float gripFlex;
-        public float indexFlex;
-        public float previousIndexFlex;
+        public float handTrigger;
+        public float indexTrigger;
+        public float previousIndexTrigger;
         public ulong indexPressFrame;
         public bool pointing;
         public bool x;
@@ -282,7 +282,7 @@ public class Avatar: OvrAvatarLocalDriver
 
         GetIndexFingerStartPointAndDirection( ref hand, out pointStart, out pointDirection );
 
-        if ( hand.input.indexFlex >= IndexThreshold && hand.input.indexPressFrame + IndexStickyFrames >= context.GetRenderFrame() )
+        if ( hand.input.indexTrigger >= IndexThreshold && hand.input.indexPressFrame + IndexStickyFrames >= context.GetRenderFrame() )
         {
             hand.input.indexPressFrame = 0;
 
@@ -320,7 +320,7 @@ public class Avatar: OvrAvatarLocalDriver
 
     void UpdateGrip( ref HandData hand )
     {
-        if ( hand.input.gripFlex > GripThreshold )
+        if ( hand.input.handTrigger > GripThreshold )
         {
             if ( hand.gripInputStartFrame == 0 )
             {
@@ -362,12 +362,12 @@ public class Avatar: OvrAvatarLocalDriver
 
     void TranslateHandPoseToInput( ref OvrAvatarDriver.HandPose handPose, ref OvrAvatarDriver.ControllerPose controllerPose, ref HandInput input )
     {
-        input.gripFlex = handPose.gripFlex;
+        input.handTrigger = handPose.gripFlex;
 
-        input.previousIndexFlex = input.indexFlex;
-        input.indexFlex = handPose.indexFlex;
+        input.previousIndexTrigger = input.indexTrigger;
+        input.indexTrigger = handPose.indexFlex;
 
-        if ( input.indexFlex >= IndexThreshold && input.previousIndexFlex < IndexThreshold )
+        if ( input.indexTrigger >= IndexThreshold && input.previousIndexTrigger < IndexThreshold )
             input.indexPressFrame = context.GetRenderFrame();
 
         input.pointing = true;
@@ -410,7 +410,7 @@ public class Avatar: OvrAvatarLocalDriver
 
             case HandState.Grip:
                 {
-                    if ( hand.input.gripFlex < GripThreshold )
+                    if ( hand.input.handTrigger < GripThreshold )
                     {
                         if ( hand.input.pointing )
                             TransitionToState( ref hand, HandState.Pointing );
@@ -431,7 +431,7 @@ public class Avatar: OvrAvatarLocalDriver
             return true;
         }
 
-        if ( hand.input.gripFlex >= GripThreshold )
+        if ( hand.input.handTrigger >= GripThreshold )
         {
             if ( hand.pointObject && hand.pointObjectFrame + PointStickyFrames >= context.GetRenderFrame() )
             {
@@ -904,12 +904,12 @@ public class Avatar: OvrAvatarLocalDriver
 
     public bool IsPressingGrip()
     {
-        return leftHand.input.gripFlex > GripThreshold || rightHand.input.gripFlex > GripThreshold;
+        return leftHand.input.handTrigger > GripThreshold || rightHand.input.handTrigger > GripThreshold;
     }
 
     public bool IsPressingIndex()
     {
-        return leftHand.input.indexFlex > IndexThreshold || rightHand.input.indexFlex > IndexThreshold;
+        return leftHand.input.indexTrigger > IndexThreshold || rightHand.input.indexTrigger > IndexThreshold;
     }
 
     public bool IsPressingX()

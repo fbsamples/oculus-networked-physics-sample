@@ -1001,8 +1001,8 @@ public class PacketSerializer: Network.Serializer
         write_bits( stream, avatarState.left_hand_rotation_b, Constants.RotationBits );
         write_bits( stream, avatarState.left_hand_rotation_c, Constants.RotationBits );
 
-        write_int( stream, avatarState.left_hand_grip_flex, Constants.FlexMinimum, Constants.FlexMaximum );
-        write_int( stream, avatarState.left_hand_index_flex, Constants.FlexMinimum, Constants.FlexMaximum );
+        write_int( stream, avatarState.left_hand_grip_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
+        write_int( stream, avatarState.left_hand_index_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
         write_bool( stream, avatarState.left_hand_pointing );
         write_bool( stream, avatarState.left_hand_thumbs_up );
 
@@ -1033,8 +1033,8 @@ public class PacketSerializer: Network.Serializer
         write_bits( stream, avatarState.right_hand_rotation_b, Constants.RotationBits );
         write_bits( stream, avatarState.right_hand_rotation_c, Constants.RotationBits );
 
-        write_int( stream, avatarState.right_hand_grip_flex, Constants.FlexMinimum, Constants.FlexMaximum );
-        write_int( stream, avatarState.right_hand_index_flex, Constants.FlexMinimum, Constants.FlexMaximum );
+        write_int( stream, avatarState.right_hand_grip_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
+        write_int( stream, avatarState.right_hand_index_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
         write_bool( stream, avatarState.right_hand_pointing );
         write_bool( stream, avatarState.right_hand_thumbs_up );
 
@@ -1081,8 +1081,8 @@ public class PacketSerializer: Network.Serializer
         read_bits( stream, out avatarState.left_hand_rotation_b, Constants.RotationBits );
         read_bits( stream, out avatarState.left_hand_rotation_c, Constants.RotationBits );
 
-        read_int( stream, out avatarState.left_hand_grip_flex, Constants.FlexMinimum, Constants.FlexMaximum );
-        read_int( stream, out avatarState.left_hand_index_flex, Constants.FlexMinimum, Constants.FlexMaximum );
+        read_int( stream, out avatarState.left_hand_grip_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
+        read_int( stream, out avatarState.left_hand_index_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
         read_bool( stream, out avatarState.left_hand_pointing );
         read_bool( stream, out avatarState.left_hand_thumbs_up );
 
@@ -1126,8 +1126,8 @@ public class PacketSerializer: Network.Serializer
         read_bits( stream, out avatarState.right_hand_rotation_b, Constants.RotationBits );
         read_bits( stream, out avatarState.right_hand_rotation_c, Constants.RotationBits );
 
-        read_int( stream, out avatarState.right_hand_grip_flex, Constants.FlexMinimum, Constants.FlexMaximum );
-        read_int( stream, out avatarState.right_hand_index_flex, Constants.FlexMinimum, Constants.FlexMaximum );
+        read_int( stream, out avatarState.right_hand_grip_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
+        read_int( stream, out avatarState.right_hand_index_trigger, Constants.TriggerMinimum, Constants.TriggerMaximum );
         read_bool( stream, out avatarState.right_hand_pointing );
         read_bool( stream, out avatarState.right_hand_thumbs_up );
 

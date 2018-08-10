@@ -58,9 +58,9 @@ public static class Constants
     public const int AngularVelocityDeltaSmallThreshold = ( 1 << AngularVelocityDeltaSmallBits ) - 1;
     public const int AngularVelocityDeltaMediumBits = 10;
     public const int AngularVelocityDeltaMediumThreshold = ( 1 << AngularVelocityDeltaMediumBits ) - 1;
-    public const int FlexBits = 8;
-    public const int FlexMinimum = 0;
-    public const int FlexMaximum = ( 1 << FlexBits ) - 1;
+    public const int TriggerBits = 8;
+    public const int TriggerMinimum = 0;
+    public const int TriggerMaximum = ( 1 << TriggerBits ) - 1;
     public const int VoiceBits = 8;
     public const int VoiceMinimum = 0;
     public const int VoiceMaximum = ( 1 << VoiceBits ) - 1;
