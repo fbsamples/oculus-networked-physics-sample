@@ -5,13 +5,13 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum SendPolicy : int
+  public enum SendPolicy : uint
   {
     /// Sends a message using an unreliable data channel (UDP-based). No delivery
     /// or ordering guarantees are provided. Sending will fail unless a connection
     /// to the peer is already established, either via a previous call to
-    /// Net.SendPacket() or an explicit Net.Connect().
-    ///
+    /// ovr_Net_SendPacket() or an explicit ovr_Net_Connect().
+    /// 
     /// Ideally, each message should fit into a single packet. Therefore, it is
     /// recommended to keep them under 1200 bytes.
     [Description("UNRELIABLE")]

@@ -1,42 +1,81 @@
 namespace Oculus.Platform
 {
   using System;
+  using System.Collections;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Reflection;
   using UnityEditor;
   using UnityEngine;
 
-  // This classes implements a UI to edit the PlatformSettings class.
-  // The UI is accessible from a the menu bar via: Oculus Platform -> Edit Settings
   [CustomEditor(typeof(PlatformSettings))]
   public class OculusPlatformSettingsEditor : Editor
   {
-    private bool isUnityEditorSettingsExpanded;
-    private bool isBuildSettingsExpanded;
-
-    private WWW getAccessTokenRequest;
-
-    private void OnEnable()
-    {
-      isUnityEditorSettingsExpanded = PlatformSettings.UseStandalonePlatform;
-#if UNITY_ANDROID
-      isBuildSettingsExpanded = true;
+    #if UNITY_EDITOR_WIN
+    static bool windowsPlatformAllowedInEditor = true;
+    GUIContent riftAppIDLabel = new GUIContent("Oculus Rift App Id [?]", 
+      "This AppID will be used when building to the Windows Standalone target.");
 #else
-      isBuildSettingsExpanded = false;
+    static bool windowsPlatformAllowedInEditor = false;
+    GUIContent riftAppIDLabel = new GUIContent("Oculus Rift App Id [?]", 
+      "This AppID will be used when building to the Windows Standalone target. It will also be used when running in the editor so long as \"Use Oculus Platform\" is checked in editor settings below");
 #endif
+    GUIContent gearAppIDLabel = new GUIContent("Gear VR App Id [?]", "This AppID will be used when building to the Android target");
+    GUIContent userTokenLabel = new GUIContent("Oculus User Token [?]",
+      "This token will be used when running in the editor if not connected to the Oculus Platform");
+    GUIContent useStandalonePlatformLabel = new GUIContent("Use User Token [?]",
+      "If this is checked your app will use a debug platform with the User Token below.  Otherwise your app will connect to the Oculus Platform.  This setting only applies to the Unity Editor");
+
+    private bool showUnityEditorSettings = false; //always expand this if we need an hardcoded token
+    private bool showBuildSettings = false;
+
+    void OnEnable() 
+    {
+      // Always expand the editor settings if we're not on windows
+      showUnityEditorSettings = !windowsPlatformAllowedInEditor;
+
+      // If we don't have a rift app id assigned, make sure the editor settings are expanded
+      if (windowsPlatformAllowedInEditor && String.IsNullOrEmpty(PlatformSettings.AppID))
+      {
+        showUnityEditorSettings = true;
+      }
     }
 
+    string MakeTextBox(GUIContent label, string variable) {
+      return GUIHelper.MakeControlWithLabel(label, () => {
+        GUI.changed = false;
+        var result = EditorGUILayout.TextField(variable);
+        SetDirtyOnGUIChange();
+        return result;
+      });
+    }
+
+    bool MakeToggle(GUIContent label, bool variable) {
+      return GUIHelper.MakeControlWithLabel(label, () => {
+        GUI.changed = false;
+        var result = EditorGUILayout.Toggle(variable);
+        SetDirtyOnGUIChange();
+        return result;
+      });
+    }
+    
     [UnityEditor.MenuItem("Oculus Platform/Edit Settings")]
     public static void Edit()
     {
-      UnityEditor.Selection.activeObject = PlatformSettings.Instance;
+      var settings = PlatformSettings.Instance;
+
+      UnityEditor.Selection.activeObject = settings;
+
+      if (String.IsNullOrEmpty(PlatformSettings.MobileAppID))
+      {
+        PlatformSettings.MobileAppID = PlatformSettings.AppID;
+      }
     }
 
     public override void OnInspectorGUI()
     {
-      //
-      // Application IDs section
-      //
-      GUIContent riftAppIDLabel = new GUIContent("Oculus Rift App Id [?]", "This AppID will be used when building to the Windows target.");
-      GUIContent gearAppIDLabel = new GUIContent("Gear VR App Id [?]", "This AppID will be used when building to the Android target");
+      bool usingWindowsPlatformInEditor = !PlatformSettings.UseStandalonePlatform && windowsPlatformAllowedInEditor;
+
       PlatformSettings.AppID = MakeTextBox(riftAppIDLabel, PlatformSettings.AppID);
       PlatformSettings.MobileAppID = MakeTextBox(gearAppIDLabel, PlatformSettings.MobileAppID);
 
@@ -44,122 +83,12 @@ namespace Oculus.Platform
       {
         UnityEngine.Application.OpenURL("https://dashboard.oculus.com/");
       }
-
-#if UNITY_ANDROID
-      if (String.IsNullOrEmpty(PlatformSettings.MobileAppID))
-      {
-        EditorGUILayout.HelpBox("Please enter a valid Gear VR App ID.", MessageType.Error);
-      }
-      else
-      {
-        var msg = "Configured to connect with App ID " + PlatformSettings.MobileAppID;
-        EditorGUILayout.HelpBox(msg, MessageType.Info);
-      }
-#else
-      if (String.IsNullOrEmpty(PlatformSettings.AppID))
-      {
-        EditorGUILayout.HelpBox("Please enter a valid Oculus Rift App ID.", MessageType.Error);
-      }
-      else
-      {
-        var msg = "Configured to connect with App ID " + PlatformSettings.AppID;
-        EditorGUILayout.HelpBox(msg, MessageType.Info);
-      }
-#endif
       EditorGUILayout.Separator();
 
-      //
-      // Unity Editor Settings section
-      //
-      isUnityEditorSettingsExpanded = EditorGUILayout.Foldout(isUnityEditorSettingsExpanded, "Unity Editor Settings");
-      if (isUnityEditorSettingsExpanded)
-      {
-        GUIHelper.HInset(6, () =>
-        {
-          bool HasTestAccessToken = !String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformTestUserAccessToken);
-          if (PlatformSettings.UseStandalonePlatform)
-          {
-            if (!HasTestAccessToken && 
-            (String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformTestUserEmail) ||
-            String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformTestUserPassword)))
-            {
-              EditorGUILayout.HelpBox("Please enter a valid user credentials.", MessageType.Error);
-            }
-            else
-            {
-              var msg = "The Unity editor will use the supplied test user credentials and operate in standalone mode.  Some user data will be mocked.";
-              EditorGUILayout.HelpBox(msg, MessageType.Info);
-            }
-          }
-          else
-          {
-            var msg = "The Unity editor will use the user credentials from the Oculus application.";
-            EditorGUILayout.HelpBox(msg, MessageType.Info);
-          }
+      MakeEditorSettings(windowsPlatformAllowedInEditor, usingWindowsPlatformInEditor);
 
-          var useStandaloneLabel = "Use Standalone Platform [?]";
-          var useStandaloneHint = "If this is checked your app will use a debug platform with the User info below.  "
-            + "Otherwise your app will connect to the Oculus Platform.  This setting only applies to the Unity Editor";
-          PlatformSettings.UseStandalonePlatform =
-            MakeToggle(new GUIContent(useStandaloneLabel, useStandaloneHint), PlatformSettings.UseStandalonePlatform);
-
-          GUI.enabled = PlatformSettings.UseStandalonePlatform;
-
-          if (!HasTestAccessToken)
-          {
-            var emailLabel = "Test User Email: ";
-            var emailHint = "Test users can be configured at " +
-              "https://dashboard.oculus.com/organizations/<your org ID>/testusers " +
-              "however any valid Oculus account email may be used.";
-            StandalonePlatformSettings.OculusPlatformTestUserEmail =
-              MakeTextBox(new GUIContent(emailLabel, emailHint), StandalonePlatformSettings.OculusPlatformTestUserEmail);
-
-            var passwdLabel = "Test User Password: ";
-            var passwdHint = "Password associated with the email address.";
-            StandalonePlatformSettings.OculusPlatformTestUserPassword =
-              MakePasswordBox(new GUIContent(passwdLabel, passwdHint), StandalonePlatformSettings.OculusPlatformTestUserPassword);
-
-            var isLoggingIn = (getAccessTokenRequest != null);
-            var loginLabel = (!isLoggingIn) ? "Login" : "Logging in...";
-
-            GUI.enabled = !isLoggingIn;
-            if (GUILayout.Button(loginLabel))
-            {
-              WWWForm form = new WWWForm();
-              var headers = form.headers;
-              headers.Add("Authorization", "Bearer OC|1141595335965881|");
-              form.AddField("email", StandalonePlatformSettings.OculusPlatformTestUserEmail);
-              form.AddField("password", StandalonePlatformSettings.OculusPlatformTestUserPassword);
-
-              // Start the WWW request to get the access token
-              getAccessTokenRequest = new WWW("https://graph.oculus.com/login", form.data, headers);
-              EditorApplication.update += GetAccessToken;
-            }
-            GUI.enabled = true;
-          }
-          else
-          {
-            var loggedInMsg = "Currently using the credentials associated with " + StandalonePlatformSettings.OculusPlatformTestUserEmail;
-            EditorGUILayout.HelpBox(loggedInMsg, MessageType.Info);
-
-            var logoutLabel = "Clear Credentials";
-
-            if (GUILayout.Button(logoutLabel))
-            {
-              StandalonePlatformSettings.OculusPlatformTestUserAccessToken = "";
-            }
-          }
-
-          GUI.enabled = true;
-        });
-      }
-      EditorGUILayout.Separator();
-
-      //
-      // Build Settings section
-      //
-      isBuildSettingsExpanded = EditorGUILayout.Foldout(isBuildSettingsExpanded, "Build Settings");
-      if (isBuildSettingsExpanded)
+      showBuildSettings = EditorGUILayout.Foldout(showBuildSettings, "Build Settings");
+      if (showBuildSettings)
       {
         GUIHelper.HInset(6, () => {
           if (!PlayerSettings.virtualRealitySupported)
@@ -172,71 +101,62 @@ namespace Oculus.Platform
           }
 
           PlayerSettings.virtualRealitySupported = MakeToggle(new GUIContent("Virtual Reality Support"), PlayerSettings.virtualRealitySupported);
+          PlayerSettings.applicationIdentifier = MakeTextBox(new GUIContent("Bundle Identifier"), PlayerSettings.applicationIdentifier);
           PlayerSettings.bundleVersion = MakeTextBox(new GUIContent("Bundle Version"), PlayerSettings.bundleVersion);
-#if UNITY_5_3 || UNITY_5_4 || UNITY_5_5
-          PlayerSettings.bundleIdentifier = MakeTextBox(new GUIContent("Bundle Identifier"), PlayerSettings.bundleIdentifier);
-#else
-          BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-          PlayerSettings.SetApplicationIdentifier(
-            buildTargetGroup,
-            MakeTextBox(
-              new GUIContent("Bundle Identifier"),
-              PlayerSettings.GetApplicationIdentifier(buildTargetGroup)));
-#endif
         });
       }
+
       EditorGUILayout.Separator();
     }
 
-    // Asyncronously fetch the access token with the given credentials
-    private void GetAccessToken()
-    {
-      if (getAccessTokenRequest != null && getAccessTokenRequest.isDone)
+    void MakeEditorSettings(bool windowsPlatformAllowedInEditor, bool usingWindowsPlatformInEditor) {
+      showUnityEditorSettings = EditorGUILayout.Foldout(showUnityEditorSettings, "Unity Editor Settings");
+      if (showUnityEditorSettings)
       {
+        GUIHelper.HInset(6, () => {
+          if(usingWindowsPlatformInEditor) {
+            if (String.IsNullOrEmpty(PlatformSettings.AppID))
+            {
+              EditorGUILayout.HelpBox(string.Format(
+                "Please enter a valid Oculus Rift App ID.",
+                PlatformSettings.AppID), MessageType.Error);
+            }
+            else
+            {
+              EditorGUILayout.HelpBox(string.Format(
+                "The Unity editor will connect to the Oculus platform and use the Rift app id ({0}).  The logged in user's data will be used.",
+                PlatformSettings.AppID), MessageType.Info);
+            }
+          } else {
+            if(String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformAccessToken)) {
+              EditorGUILayout.HelpBox(
+                "Please enter a valid user token below.", 
+                MessageType.Error);
+            } else {
+              EditorGUILayout.HelpBox(
+                "The Unity editor will use the supplied user token and operate in standalone mode.  Some user data will be mocked.", 
+                MessageType.Info);
+            }
+          }
 
-        // Clear the password
-        StandalonePlatformSettings.OculusPlatformTestUserPassword = "";
-
-        if (String.IsNullOrEmpty(getAccessTokenRequest.error))
-        {
-          var Response = JsonUtility.FromJson<OculusStandalonePlatformResponse>(getAccessTokenRequest.text);
-          StandalonePlatformSettings.OculusPlatformTestUserAccessToken = Response.access_token;
-        }
-        
-        GUI.changed = true;
-        EditorApplication.update -= GetAccessToken;
-        getAccessTokenRequest = null;
+          if (windowsPlatformAllowedInEditor)
+          {
+            PlatformSettings.UseStandalonePlatform = MakeToggle(useStandalonePlatformLabel, PlatformSettings.UseStandalonePlatform);
+          }
+            
+          GUI.enabled = !usingWindowsPlatformInEditor;
+          if (String.IsNullOrEmpty(StandalonePlatformSettings.OculusPlatformAccessToken))
+          {
+            if (GUILayout.Button("Get User Token"))
+            {
+              var appID = (string.IsNullOrEmpty(PlatformSettings.AppID)) ? PlatformSettings.MobileAppID : PlatformSettings.AppID;
+              UnityEngine.Application.OpenURL("https://developer2.oculus.com/application/" + appID + "/api");
+            }
+          }
+          StandalonePlatformSettings.OculusPlatformAccessToken = MakeTextBox(userTokenLabel, StandalonePlatformSettings.OculusPlatformAccessToken);
+          GUI.enabled = true;
+        });
       }
-    }
-
-    private string MakeTextBox(GUIContent label, string variable)
-    {
-      return GUIHelper.MakeControlWithLabel(label, () => {
-        GUI.changed = false;
-        var result = EditorGUILayout.TextField(variable);
-        SetDirtyOnGUIChange();
-        return result;
-      });
-    }
-    private string MakePasswordBox(GUIContent label, string variable)
-    {
-      return GUIHelper.MakeControlWithLabel(label, () => {
-        GUI.changed = false;
-        var result = EditorGUILayout.PasswordField(variable);
-        SetDirtyOnGUIChange();
-        return result;
-      });
-    }
-
-
-    private bool MakeToggle(GUIContent label, bool variable)
-    {
-      return GUIHelper.MakeControlWithLabel(label, () => {
-        GUI.changed = false;
-        var result = EditorGUILayout.Toggle(variable);
-        SetDirtyOnGUIChange();
-        return result;
-      });
     }
 
     private void SetDirtyOnGUIChange()

@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum RoomJoinPolicy : int
+  public enum RoomJoinPolicy : uint
   {
     [Description("NONE")]
     None,

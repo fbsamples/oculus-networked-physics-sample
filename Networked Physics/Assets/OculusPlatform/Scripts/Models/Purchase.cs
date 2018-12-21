@@ -10,18 +10,16 @@ namespace Oculus.Platform.Models
 
   public class Purchase
   {
-    public readonly DateTime ExpirationTime;
+    public readonly string Sku;
     public readonly DateTime GrantTime;
     public readonly UInt64 ID;
-    public readonly string Sku;
 
 
     public Purchase(IntPtr o)
     {
-      ExpirationTime = CAPI.ovr_Purchase_GetExpirationTime(o);
+      Sku = CAPI.ovr_Purchase_GetSKU(o);
       GrantTime = CAPI.ovr_Purchase_GetGrantTime(o);
       ID = CAPI.ovr_Purchase_GetPurchaseID(o);
-      Sku = CAPI.ovr_Purchase_GetSKU(o);
     }
   }
 

@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum MatchmakingCriterionImportance : int
+  public enum MatchmakingCriterionImportance : uint
   {
     [Description("REQUIRED")]
     Required,

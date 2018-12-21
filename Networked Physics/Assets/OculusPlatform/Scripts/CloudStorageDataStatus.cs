@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum CloudStorageDataStatus : int
+  public enum CloudStorageDataStatus : uint
   {
     [Description("UNKNOWN")]
     Unknown,

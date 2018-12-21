@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum MatchmakingStatApproach : int
+  public enum MatchmakingStatApproach : uint
   {
     [Description("UNKNOWN")]
     Unknown,

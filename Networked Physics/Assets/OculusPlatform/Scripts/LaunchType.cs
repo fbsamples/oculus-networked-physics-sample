@@ -5,7 +5,7 @@ namespace Oculus.Platform
 
   using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum LaunchType : int
+  public enum LaunchType : uint
   {
     [Description("UNKNOWN")]
     Unknown,
@@ -18,9 +18,6 @@ namespace Oculus.Platform
 
     [Description("COORDINATED")]
     Coordinated,
-
-    [Description("DEEPLINK")]
-    Deeplink,
 
   }
 

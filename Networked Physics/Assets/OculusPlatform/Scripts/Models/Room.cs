@@ -1,7 +1,5 @@
 // This file was @generated with LibOVRPlatform/codegen/main. Do not modify it!
 
-#pragma warning disable 0618
-
 namespace Oculus.Platform.Models
 {
   using System;
@@ -12,83 +10,37 @@ namespace Oculus.Platform.Models
 
   public class Room
   {
+    public readonly UInt64 ID;
     public readonly UInt64 ApplicationID;
     public readonly Dictionary<string, string> DataStore;
     public readonly string Description;
-    public readonly UInt64 ID;
-    // May be null. Check before using.
-    public readonly UserList InvitedUsersOptional;
-    [Obsolete("Deprecated in favor of InvitedUsersOptional")]
     public readonly UserList InvitedUsers;
     public readonly bool IsMembershipLocked;
     public readonly RoomJoinPolicy JoinPolicy;
     public readonly RoomJoinability Joinability;
-    // May be null. Check before using.
-    public readonly MatchmakingEnqueuedUserList MatchedUsersOptional;
-    [Obsolete("Deprecated in favor of MatchedUsersOptional")]
-    public readonly MatchmakingEnqueuedUserList MatchedUsers;
     public readonly uint MaxUsers;
     public readonly string Name;
-    // May be null. Check before using.
-    public readonly User OwnerOptional;
-    [Obsolete("Deprecated in favor of OwnerOptional")]
     public readonly User Owner;
     public readonly RoomType Type;
-    // May be null. Check before using.
-    public readonly UserList UsersOptional;
-    [Obsolete("Deprecated in favor of UsersOptional")]
     public readonly UserList Users;
     public readonly uint Version;
 
 
     public Room(IntPtr o)
     {
+      ID = CAPI.ovr_Room_GetID(o);
       ApplicationID = CAPI.ovr_Room_GetApplicationID(o);
       DataStore = CAPI.DataStoreFromNative(CAPI.ovr_Room_GetDataStore(o));
       Description = CAPI.ovr_Room_GetDescription(o);
-      ID = CAPI.ovr_Room_GetID(o);
-      {
-        var pointer = CAPI.ovr_Room_GetInvitedUsers(o);
-        InvitedUsers = new UserList(pointer);
-        if (pointer == IntPtr.Zero) {
-          InvitedUsersOptional = null;
-        } else {
-          InvitedUsersOptional = InvitedUsers;
-        }
-      }
+      InvitedUsers = new UserList(CAPI.ovr_Room_GetInvitedUsers(o));
       IsMembershipLocked = CAPI.ovr_Room_GetIsMembershipLocked(o);
       JoinPolicy = CAPI.ovr_Room_GetJoinPolicy(o);
       Joinability = CAPI.ovr_Room_GetJoinability(o);
-      {
-        var pointer = CAPI.ovr_Room_GetMatchedUsers(o);
-        MatchedUsers = new MatchmakingEnqueuedUserList(pointer);
-        if (pointer == IntPtr.Zero) {
-          MatchedUsersOptional = null;
-        } else {
-          MatchedUsersOptional = MatchedUsers;
-        }
-      }
       MaxUsers = CAPI.ovr_Room_GetMaxUsers(o);
       Name = CAPI.ovr_Room_GetName(o);
-      {
-        var pointer = CAPI.ovr_Room_GetOwner(o);
-        Owner = new User(pointer);
-        if (pointer == IntPtr.Zero) {
-          OwnerOptional = null;
-        } else {
-          OwnerOptional = Owner;
-        }
-      }
+      Owner = new User(CAPI.ovr_Room_GetOwner(o));
       Type = CAPI.ovr_Room_GetType(o);
-      {
-        var pointer = CAPI.ovr_Room_GetUsers(o);
-        Users = new UserList(pointer);
-        if (pointer == IntPtr.Zero) {
-          UsersOptional = null;
-        } else {
-          UsersOptional = Users;
-        }
-      }
+      Users = new UserList(CAPI.ovr_Room_GetUsers(o));
       Version = CAPI.ovr_Room_GetVersion(o);
     }
   }

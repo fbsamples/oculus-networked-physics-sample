@@ -54,7 +54,6 @@ namespace Oculus.Platform
         }
 
         int dest = 0;
-        float tmpPeakAmp = -1;
         for (int i = 0; i < sizeToFetch; i++)
         {
           float val = scratchBuffer[i];
@@ -62,13 +61,8 @@ namespace Oculus.Platform
           for (int j = 0; j < channels; j++)
           {
             data[dest++] = val;
-            if (val > tmpPeakAmp)
-            {
-              tmpPeakAmp = val;
-            }
           }
         }
-        parent.peakAmplitude = tmpPeakAmp;
       }
     }
 
@@ -83,7 +77,6 @@ namespace Oculus.Platform
     }
 
     public AudioSource audioSource;
-    public float peakAmplitude;
 
     protected IVoipPCMSource pcmSource;
 
