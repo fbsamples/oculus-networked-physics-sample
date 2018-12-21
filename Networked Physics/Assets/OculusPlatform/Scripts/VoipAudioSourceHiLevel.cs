@@ -81,7 +81,7 @@ namespace Oculus.Platform
     protected IVoipPCMSource pcmSource;
 
     static int audioSystemPlaybackFrequency;
-    static bool verboseLogging = false;
+    static bool verboseLogging = true;
 
     protected void Stop() {}
 
